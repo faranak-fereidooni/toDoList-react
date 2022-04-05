@@ -14,6 +14,12 @@ class App extends Component {
       { id: "3", value: "Buy mango" },
       { id: "4", value: "Make a tea" },
     ],
+	filteredToDos:[
+    { id: "1", value: "Buy Milk" },
+    { id: "2", value: "Take a shower" },
+    { id: "3", value: "Buy mango" },
+    { id: "4", value: "Make a tea" },
+    ]
   };
  
 
@@ -22,27 +28,29 @@ class App extends Component {
     const todos=[...this.state.todos];
     const item={id:Math.floor(Math.random() * 100),value:e.target.todo.value};
     todos.push(item);
-    this.setState({todos});
+    this.setState({todos,filteredToDos:todos});
     e.target.todo.value="";
   }
 
   handleDelete=(todoId)=>{
     const todos=this.state.todos.filter(t=>t.id != todoId)
-    this.setState({todos});
+    this.setState({todos,filteredToDos:todos});
   }
 
   handleSearch = (e) => {
     e.preventDefault();
-    const todos =this.state.todos.filter(todo=> todo.value.trim().toLowerCase().includes(e.target.value));
-    this.setState({todos});
+    const todos=[...this.state.todos];
+    const newTodos = todos
+    .filter(todo=>todo.value.trim().toLowerCase().includes(e.target.value));
+    this.setState({filteredToDos:newTodos});
   };
 
   render() { 
     return (
       <div className="container">
           <h1 className="text-light mb-5 mt-5 text-center">ToDo List</h1>
-        <SearchToDo todos={this.state.todos} onChange={this.handleSearch} />
-        <ToDoList onDelete={this.handleDelete} todos={this.state.todos} />
+        <SearchToDo onChange={this.handleSearch} />
+        <ToDoList onDelete={this.handleDelete} todos={this.state.filteredToDos} />
         <AddToDo onSubmit={this.handleAdd} />
       </div>
     );
